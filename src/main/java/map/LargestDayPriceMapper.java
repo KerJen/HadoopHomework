@@ -17,10 +17,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
-public class DayFrequencyMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
-
-    final IntWritable one = new IntWritable(1);
-
+public class LargestDayPriceMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
     @Override
     public void map(LongWritable longWritable, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
         String valueString = value.toString();
@@ -31,8 +28,11 @@ public class DayFrequencyMapper extends MapReduceBase implements Mapper<LongWrit
             Date rawDate = Date.from(Instant.from(ta));
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = format.format(rawDate);
-            output.collect(new Text(formattedDate), one);
 
-        } catch (DateTimeParseException ignored) {}
+            int price = Integer.parseInt(tableRow[6]);
+
+            output.collect(new Text(formattedDate), new IntWritable(price));
+
+        } catch (Exception ignored) {}
     }
 }
