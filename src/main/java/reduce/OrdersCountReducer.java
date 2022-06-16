@@ -9,12 +9,12 @@ import org.apache.hadoop.mapred.*;
 
 public class OrdersCountReducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable> {
 
-    public void reduce(Text t_key, Iterator<IntWritable> values, OutputCollector<Text,IntWritable> output, Reporter reporter) throws IOException {
+    public void reduce(Text phone, Iterator<IntWritable> values, OutputCollector<Text,IntWritable> output, Reporter reporter) throws IOException {
         int phoneNumberCount = 0;
         while (values.hasNext()) {
             IntWritable value =  values.next();
             phoneNumberCount += value.get();
         }
-        output.collect(t_key, new IntWritable(phoneNumberCount));
+        output.collect(phone, new IntWritable(phoneNumberCount));
     }
 }

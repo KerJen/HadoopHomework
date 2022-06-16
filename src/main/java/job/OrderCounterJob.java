@@ -10,11 +10,10 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import reduce.OrdersCountReducer;
 
-public class PhoneCounterJob extends Configured implements Tool {
+public class OrderCounterJob extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
         JobConf job_conf = new JobConf(getClass());
-        job_conf.setJobName("Orders");
 
         job_conf.setOutputKeyClass(Text.class);
         job_conf.setOutputValueClass(IntWritable.class);
@@ -25,12 +24,10 @@ public class PhoneCounterJob extends Configured implements Tool {
         job_conf.setInputFormat(TextInputFormat.class);
         job_conf.setOutputFormat(TextOutputFormat.class);
 
-
         FileInputFormat.setInputPaths(job_conf, new Path("input"));
-        FileOutputFormat.setOutputPath(job_conf, new Path("output"));
+        FileOutputFormat.setOutputPath(job_conf, new Path("output/orders_count"));
 
-
-        Job job = Job.getInstance(job_conf, "PhoneCounter");
+        Job job = Job.getInstance(job_conf, "Orders");
 
         return job.waitForCompletion(true) ? 0 :1;
     }

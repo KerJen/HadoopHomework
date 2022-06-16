@@ -1,18 +1,23 @@
-import job.PhoneCounterJob;
-import map.OrdersCountMapper;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.*;
+import job.DayFrequencyJob;
+import job.OrderCounterJob;
+import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.util.ToolRunner;
-import reduce.OrdersCountReducer;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Program {
     public static void main(String[] args) {
+
         try {
-            int exitCode = ToolRunner.run(new PhoneCounterJob(), args);
+            FileUtils.deleteDirectory(new File("output"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            ToolRunner.run(new OrderCounterJob(), args);
+            ToolRunner.run(new DayFrequencyJob(), args);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
